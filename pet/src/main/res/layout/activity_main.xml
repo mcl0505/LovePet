@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.mh55.lovepet.http.vm.MainViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".main.MainActivity">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/mViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/mTabButtonGroup"/>
+
+        <com.mh55.easymvvm.widget.tab.TabButtonGroup
+            android:id="@+id/mTabButtonGroup"
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:layout_height="?attr/actionBarSize"
+            android:clipChildren="false"
+            app:layout_constraintBottom_toBottomOf="parent">
+            <com.mh55.easymvvm.widget.tab.TabButton
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                app:tbn_checked="true"
+                app:tbn_tip="首页"
+                app:tbn_icon_size="24dp"
+                app:tbn_text_size="14sp"
+                app:tbn_text_color="@color/color_2C2C2C"
+                app:tbn_text_select_color="@color/color_app"
+                app:tbn_selected_icon="@mipmap/icon_main_tab_home_select"
+                app:tbn_unselected_icon="@mipmap/icon_main_tab_home_default"
+                android:layout_height="match_parent"/>
+            <com.mh55.easymvvm.widget.tab.TabButton
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                app:tbn_tip="社区"
+                app:tbn_icon_size="24dp"
+                app:tbn_text_size="14sp"
+                app:tbn_text_color="@color/color_2C2C2C"
+                app:tbn_text_select_color="@color/color_app"
+                app:tbn_selected_icon="@mipmap/icon_main_tab_community_select"
+                app:tbn_unselected_icon="@mipmap/icon_main_tab_community_default"
+                android:layout_height="match_parent"/>
+            <com.mh55.easymvvm.widget.tab.TabButton
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                app:tbn_checked="true"
+                app:tbn_tip="推送"
+                app:tbn_icon_size="24dp"
+                app:tbn_text_size="14sp"
+                android:visibility="invisible"
+                app:tbn_text_color="@color/color_2C2C2C"
+                app:tbn_text_select_color="@color/color_app"
+                app:tbn_selected_icon="@mipmap/icon_mian_push"
+                app:tbn_unselected_icon="@mipmap/icon_mian_push"
+                android:layout_height="match_parent"/>
+            <com.mh55.easymvvm.widget.tab.TabButton
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                app:tbn_tip="消息"
+                app:tbn_icon_size="24dp"
+                app:tbn_text_size="14sp"
+                app:tbn_text_color="@color/color_2C2C2C"
+                app:tbn_text_select_color="@color/color_app"
+                app:tbn_selected_icon="@mipmap/icon_mian_tab_msg_select"
+                app:tbn_unselected_icon="@mipmap/icon_mian_tab_msg_default"
+                android:layout_height="match_parent"/>
+
+            <com.mh55.easymvvm.widget.tab.TabButton
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                app:tbn_tip="我的"
+                app:tbn_icon_size="24dp"
+                app:tbn_text_color="@color/color_2C2C2C"
+                app:tbn_text_size="14sp"
+                app:tbn_text_select_color="@color/color_app"
+                app:tbn_selected_icon="@mipmap/icon_mian_tab_mine_select"
+                app:tbn_unselected_icon="@mipmap/icon_mian_tab_mine_default"
+                android:layout_height="match_parent"/>
+
+        </com.mh55.easymvvm.widget.tab.TabButtonGroup>
+
+        <com.ogaclejapan.arclayout.ArcLayout
+            android:id="@+id/mArcLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            app:arc_axisRadius="70dp"
+            app:arc_freeAngle="true"
+            app:arc_origin="bottom"
+            app:arc_radius="100dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/mTabButtonGroup">
+
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@mipmap/icon_main_push_pet"
+                app:arc_angle="20"
+                android:tag="1"/>
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:tag="2"
+                android:background="@mipmap/icon_main_push_community"
+                app:arc_angle="60"/>
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:tag="3"
+                android:background="@mipmap/icon_main_push_test"
+                app:arc_angle="120"/>
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:tag="4"
+                android:background="@mipmap/icon_mian_tab_mine_select"
+                app:arc_angle="160"/>
+
+        </com.ogaclejapan.arclayout.ArcLayout>
+
+        <ImageView
+            android:id="@+id/mPush"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@mipmap/icon_mian_push"
+            android:background="@drawable/shape_main_push_bg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/mTabButtonGroup"
+            android:layout_marginBottom="30dp"
+            app:layout_constraintBottom_toBottomOf="@id/mTabButtonGroup"
+            android:padding="8dp"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

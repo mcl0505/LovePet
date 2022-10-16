@@ -1,0 +1,9 @@
+apply plugin: 'com.android.library'
+apply from:'../dependencies.gradle'
+
+
+dependencies {
+    api project(path: ':lib_base')
+    api project(path: ':lib_push')
+    implementation "com.ogaclejapan.arclayout:library:1.1.0@aar"
+}

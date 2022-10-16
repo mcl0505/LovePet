@@ -1,0 +1,4 @@
+rootProject.name = "LovePet"
+include ':pet'
+// 框架
+include ':easymvvm'

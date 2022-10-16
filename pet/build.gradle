@@ -1,0 +1,25 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+}
+apply from:'../dependencies.gradle'
+android {
+    defaultConfig {
+        applicationId "com.mh55.lovepet"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation project(path: ':easymvvm')
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    //菜单控件
+    implementation "com.ogaclejapan.arclayout:library:1.1.0@aar"
+}
