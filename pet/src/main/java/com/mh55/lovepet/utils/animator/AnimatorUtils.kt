@@ -1,35 +1,30 @@
-package com.mh55.lovepet.utils.animator;
+package com.mh55.lovepet.utils.animator
 
-import android.animation.PropertyValuesHolder;
+import android.animation.PropertyValuesHolder
 
-public class AnimatorUtils {
-    public static final String ROTATION = "rotation";
-    public static final String SCALE_X = "scaleX";
-    public static final String SCALE_Y = "scaleY";
-    public static final String TRANSLATION_X = "translationX";
-    public static final String TRANSLATION_Y = "translationY";
-
-    private AnimatorUtils() {
-        //No instances.
+object AnimatorUtils {
+    const val ROTATION = "rotation"
+    const val SCALE_X = "scaleX"
+    const val SCALE_Y = "scaleY"
+    const val TRANSLATION_X = "translationX"
+    const val TRANSLATION_Y = "translationY"
+    fun rotation(vararg values: Float): PropertyValuesHolder {
+        return PropertyValuesHolder.ofFloat(ROTATION, *values)
     }
 
-    public static PropertyValuesHolder rotation(float... values) {
-        return PropertyValuesHolder.ofFloat(ROTATION, values);
+    fun translationX(vararg values: Float): PropertyValuesHolder {
+        return PropertyValuesHolder.ofFloat(TRANSLATION_X, *values)
     }
 
-    public static PropertyValuesHolder translationX(float... values) {
-        return PropertyValuesHolder.ofFloat(TRANSLATION_X, values);
+    fun translationY(vararg values: Float): PropertyValuesHolder {
+        return PropertyValuesHolder.ofFloat(TRANSLATION_Y, *values)
     }
 
-    public static PropertyValuesHolder translationY(float... values) {
-        return PropertyValuesHolder.ofFloat(TRANSLATION_Y, values);
+    fun scaleX(vararg values: Float): PropertyValuesHolder {
+        return PropertyValuesHolder.ofFloat(SCALE_X, *values)
     }
 
-    public static PropertyValuesHolder scaleX(float... values) {
-        return PropertyValuesHolder.ofFloat(SCALE_X, values);
-    }
-
-    public static PropertyValuesHolder scaleY(float... values) {
-        return PropertyValuesHolder.ofFloat(SCALE_Y, values);
+    fun scaleY(vararg values: Float): PropertyValuesHolder {
+        return PropertyValuesHolder.ofFloat(SCALE_Y, *values)
     }
 }
