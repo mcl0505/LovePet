@@ -9,7 +9,6 @@ ext {
             targetSdkVersion : 31,                  //默认适配的版本  31=Android 12
             versionCode      : 1,                   //APK版本号  依次递增
             versionName      : "v 1.0.1",           //版本名称    APK版本更新可修改
-//            versionName      : "v 1.0.1",           //版本名称    APK版本更新可修改
             signleModule     : false                 //是否是需要单独运行某个模块 true=单独模块  false=app项目
     ]
 
@@ -20,7 +19,8 @@ ext {
             viewpager2Version      : "1.0.0",//ViewPager2
             multidexVersion        : "2.0.1",//方法数超出最大限制解决方案
             constraintlayoutVersion: "2.0.4",//约束布局
-            materialVersion        : "1.3.0",//Design 库
+            materialVersion        : "1.4.0",//Design 库
+            paletteVersion         : "1.0.0",//调色板
             lifecycle              : "2.4.0",
             roomVersion            : "2.2.5",
             archLifecycleVersion   : "2.2.0",
@@ -49,6 +49,7 @@ ext {
             "core"              : "androidx.core:core-ktx:1.5.0",
             "appcompat"         : "androidx.appcompat:appcompat:1.3.1",
             "vectordrawable"    : "androidx.vectordrawable:vectordrawable:1.1.0",
+            "palette"           : "androidx.palette:palette:${version.paletteVersion}",
             "test"              : "androidx.test.ext:junit:1.1.2",
             "espresso"          : "androidx.test.espresso:espresso-core:3.3.0",
             "viewpager2"        : "androidx.viewpager2:viewpager2:${version.viewpager2Version}",

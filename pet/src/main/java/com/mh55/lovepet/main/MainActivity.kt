@@ -1,17 +1,7 @@
 package com.mh55.lovepet.main
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
-import android.animation.AnimatorSet
-import android.view.View
-import android.view.animation.AnticipateInterpolator
-import android.view.animation.OvershootInterpolator
-import android.widget.Button
 import androidx.core.view.children
 import com.mh55.easymvvm.ext.singleClick
-import com.mh55.easymvvm.ext.toast
-import com.mh55.easymvvm.ext.visibleOrGone
-import com.mh55.easymvvm.ext.visibleOrInvisible
 import com.mh55.easymvvm.ui.activity.BaseActivity
 import com.mh55.easymvvm.widget.tab.withViewPager
 import com.mh55.lovepet.BR
@@ -23,9 +13,6 @@ import com.mh55.lovepet.http.vm.MainViewModel
 import com.mh55.lovepet.message.MessageFragment
 import com.mh55.lovepet.mine.MineFragment
 import com.mh55.lovepet.utils.animator.MainPushAnimator
-import com.mh55.lovepet.utils.animator.MainPushAnimator.createHideItemAnimator
-import com.mh55.lovepet.utils.animator.MainPushAnimator.createShowItemAnimator
-import com.ogaclejapan.arclayout.ArcLayout
 
 /**
  * 公司名称：~漫漫人生路~总得错几步~
@@ -33,7 +20,6 @@ import com.ogaclejapan.arclayout.ArcLayout
  * 创建时间：2022/10/15
  * 功能描述： 主页
  */
-
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
     R.layout.activity_main,
     BR.viewModel
@@ -48,13 +34,14 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
             MessageFragment.newInstance(),//消息
             MineFragment.newInstance()//个人中心
         ))
-
+        mBinding.mTabButtonGroup.onTabSelectClick={
+            MainPushAnimator.hindMenu(mBinding.mPush,mBinding.mArcLayout)
+        }
         mBinding.mPush.singleClick {
             if (it.isSelected){
                 MainPushAnimator.hindMenu(it,mBinding.mArcLayout)
             }else MainPushAnimator.showMenu(it,mBinding.mArcLayout)
         }
-
         mBinding.mArcLayout.children.forEach {
             it.singleClick {
                 MainPushAnimator.hindMenu(mBinding.mPush,mBinding.mArcLayout)
@@ -65,6 +52,4 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
         }
 
     }
-
-
 }

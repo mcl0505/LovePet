@@ -55,6 +55,7 @@ dependencies {
     implementation rootProject.ext.AndroidX.appcompat
     implementation rootProject.ext.AndroidX.constraintlayout
     implementation rootProject.ext.AndroidX.vectordrawable
+    implementation rootProject.ext.AndroidX.palette
     // TODO  页面导航
     implementation rootProject.ext.AndroidX.navigationFragment
     implementation rootProject.ext.AndroidX.navigationUi
