@@ -3,9 +3,13 @@ package com.mh55.lovepet.mine
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.android.material.appbar.AppBarLayout
+import com.mh55.easymvvm.dsl.setShapeDrawable
+import com.mh55.easymvvm.ext.displayImageRound
 import com.mh55.easymvvm.ext.dp2px
 import com.mh55.easymvvm.ext.getColor
 import com.mh55.easymvvm.ext.getPaletteColor
+import com.mh55.easymvvm.ext.singleClick
+import com.mh55.easymvvm.ext.toast
 import com.mh55.easymvvm.ui.fragment.BaseFragment
 import com.mh55.easymvvm.utils.StatusBarUtils
 import com.mh55.lovepet.BR
@@ -29,8 +33,26 @@ class MineFragment : BaseFragment<FragmentMineBinding, MineViewModel>(R.layout.f
     override fun initData() {
         super.initData()
         initToolBar()
-        mBinding.mAvatar.load(R.mipmap.cat) {
-            transformations(CircleCropTransformation())
+        displayImageRound(R.mipmap.cat,mBinding.mAvatar)
+        mBinding.apply {
+            mTopBg.singleClick {
+                "点击更换背景".toast()
+            }
+            mineOut.singleClick {
+                "退出登录".toast()
+            }
+            mPetTime.setShapeDrawable {
+                shape {
+                    addSolidColor(mBinding.mTopBg.getPaletteColor().getLightVibrantColor(R.color.white.getColor()))
+                    addCornerSize(2f)
+                }
+            }
+            mineOut.setShapeDrawable {
+                shape {
+                    addSolidColor(mBinding.mTopBg.getPaletteColor().getLightVibrantColor(R.color.white.getColor()))
+                    addCornerSize(5f)
+                }
+            }
         }
     }
 
@@ -38,6 +60,8 @@ class MineFragment : BaseFragment<FragmentMineBinding, MineViewModel>(R.layout.f
         mBinding.mToolBar.apply {
             setPadding(0, StatusBarUtils.getStatusBarHeight(mActivity), 0, 0)
             layoutParams.height = mContext.dp2px(50) + StatusBarUtils.getStatusBarHeight(mContext)
+            //修改标题名称
+            title = "梦虍"
         }
 
         mBinding.mCollapsing.apply {

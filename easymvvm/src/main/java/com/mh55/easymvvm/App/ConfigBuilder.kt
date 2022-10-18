@@ -1,6 +1,7 @@
 package com.mh55.easymvvm.App
 
 import com.mh55.easymvvm.EasyApplication
+import com.mh55.easymvvm.R
 
 object ConfigBuilder {
     //是否开启日志打印
@@ -9,6 +10,8 @@ object ConfigBuilder {
     var isOpenCarsh = true
     //网络请求地址
     var mBaseHost = ""
+
+    var mImagePlaceholder = R.mipmap.icon_avatar_default
 
     object Path{
         //异常采集保存路径

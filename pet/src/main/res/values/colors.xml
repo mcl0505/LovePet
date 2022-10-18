@@ -10,6 +10,16 @@
 
 
 
+    <!--  APP 主题色  -->
     <color name="color_app">#FF7A0F</color>
+    <color name="color_app_10">#19FF7A0F</color>
+    <color name="color_app_20">#33FF7A0F</color>
+    <color name="color_app_30">#4CFF7A0F</color>
+    <color name="color_app_40">#66FF7A0F</color>
+    <color name="color_app_50">#7FFF7A0F</color>
+    <color name="color_app_60">#99FF7A0F</color>
+    <color name="color_app_70">#B2FF7A0F</color>
+    <color name="color_app_80">#CCFF7A0F</color>
+    <color name="color_app_90">#E5FF7A0F</color>
 
 </resources>
