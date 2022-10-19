@@ -1,10 +1,13 @@
 package com.mh55.easymvvm.ext
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.SystemClock
 import android.view.View
 import android.widget.ImageView
 import androidx.core.graphics.drawable.toBitmap
 import androidx.palette.graphics.Palette
+import com.mh55.easymvvm.App.ConfigBuilder
 import com.mh55.easymvvm.R
 
 private var lastClickTime: Long = 0
@@ -48,16 +51,28 @@ fun View.visibleOrInvisible(show: Boolean) {
 }
 
 /**
- *  getDominantColor：获取图片中的主色调
-getMutedColor：获取图片中柔和的颜色
-getDarkMutedColor：获取图片中柔和的暗色
-getLightMutedColor：获取图片中柔和的亮色
-getVibrantColor：获取图片中有活力的颜色
-getDarkVibrantColor：获取图片中有活力的暗色
-getLightVibrantColor：获取图片中有活力的亮色
+ * Palette可以提取的颜色如下:
+● Vibrant （有活力的）
+● Vibrant dark（有活力的 暗色）
+● Vibrant light（有活力的 亮色）
+● Muted （柔和的）
+● Muted dark（柔和的 暗色）
+● Muted light（柔和的 亮色）
  */
-fun ImageView.getPaletteColor(): Palette {
-    val mBitmap = this.drawable.toBitmap()
-    val builder = Palette.from(mBitmap).generate()
-    return builder
+fun getPaletteColor(source: Any? = null, block: (mPalette: Palette) -> Unit) {
+    var mBitmap: Bitmap? = null
+    mBitmap = when (source) {
+        is ImageView -> source.drawable?.toBitmap()!!
+        is Int -> source.getDrawable()?.toBitmap()!!
+        is Drawable -> source.toBitmap()
+        is Bitmap -> source
+        else -> ConfigBuilder.mImagePlaceholder.getDrawable()?.toBitmap()!!
+    }
+    Palette.Builder(mBitmap.copy(Bitmap.Config.ARGB_8888, true)!!).clearFilters().generate {
+        if (it == null) {
+            block.invoke(Palette.from(ConfigBuilder.mImagePlaceholder.getDrawable()?.toBitmap()!!).generate())
+        } else {
+            block.invoke(it)
+        }
+    }
 }

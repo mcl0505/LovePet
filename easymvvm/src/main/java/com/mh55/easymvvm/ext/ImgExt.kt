@@ -7,6 +7,7 @@ import coil.load
 import coil.loadAny
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
+import coil.transform.RoundedCornersTransformation
 import com.mh55.easymvvm.App.ConfigBuilder
 import com.mh55.easymvvm.EasyApplication
 import com.mh55.easymvvm.R
@@ -70,6 +71,29 @@ fun displayImageRound(url: Any?,imageView: ImageView?=null,block:(drawable:Drawa
             placeholder(ConfigBuilder.mImagePlaceholder)
             error(ConfigBuilder.mImagePlaceholder)
             transformations(CircleCropTransformation())
+        }
+    }
+}
+
+/**
+ * 加载圆形图片
+ * @param url  必选  可为空
+ * @param imageView  图片展示控件  如果不传，则加载的结果在block() 中展示
+ * @param block  图加载结果回调  仅imageView 为null 时生效
+ */
+fun displayImageRadius(url: Any?,imageView: ImageView?=null,radius:Float?=0f){
+    if (imageView == null){
+        val request = ImageRequest.Builder(EasyApplication.getContext())
+            .data(url)
+            .placeholder(ConfigBuilder.mImagePlaceholder)
+            .error(ConfigBuilder.mImagePlaceholder)
+            .build()
+        EasyApplication.getContext().imageLoader.enqueue(request)
+    }else {
+        imageView.loadAny(url){
+            placeholder(ConfigBuilder.mImagePlaceholder)
+            error(ConfigBuilder.mImagePlaceholder)
+            transformations(RoundedCornersTransformation(radius?:0f))
         }
     }
 }

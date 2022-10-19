@@ -82,7 +82,6 @@ class DslShareBuilderImp : DslShareBuilder {
         mViewCornerRadii = size
     }
 
-
     override fun addStroke(size: Int,color: Int) {
         mViewStrokeSize = size
         mViewStrokeColor = color

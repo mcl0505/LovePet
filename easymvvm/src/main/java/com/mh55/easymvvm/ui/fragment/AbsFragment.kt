@@ -143,7 +143,6 @@ abstract class AbsFragment<V : ViewBinding, VM : BaseViewModel>(
         mViewModel.mUiChangeLiveData.postValue(BaseViewIntent.setResult(resultCode, map, bundle, data))
     }
 
-
     override fun initBaseLiveData() {
         mViewModel.mUiChangeLiveData.observe(this){
             when(it){
