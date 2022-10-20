@@ -111,8 +111,9 @@ open class BaseDialog<DB : ViewDataBinding,VM : BaseViewModel,>(val layoutId: In
 
     open fun show(manager: FragmentManager?) {
         kotlin.runCatching {
-            manager?.beginTransaction()?.remove(this)?.commit()
-            super.show(manager!!, TAG)
+            manager?.beginTransaction()?.remove(this)?.commitAllowingStateLoss()
+//            super.show(manager!!, TAG)
+            manager?.beginTransaction()?.add(this,TAG)?.commitAllowingStateLoss()
         }
 
     }

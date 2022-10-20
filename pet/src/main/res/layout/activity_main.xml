@@ -43,7 +43,7 @@
             <com.mh55.easymvvm.widget.tab.TabButton
                 android:layout_weight="1"
                 android:layout_width="0dp"
-                app:tbn_tip="社区"
+                app:tbn_tip="宠物圈"
                 app:tbn_icon_size="24dp"
                 app:tbn_text_size="14sp"
                 app:tbn_text_color="@color/color_2C2C2C"

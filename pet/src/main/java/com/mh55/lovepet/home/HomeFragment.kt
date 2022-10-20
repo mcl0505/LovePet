@@ -32,7 +32,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(R.layout.f
         @JvmStatic
         fun newInstance() = HomeFragment()
     }
-    var isInit = true
+
     val bannerList = listOf(R.mipmap.img_cat_bg,R.mipmap.img_cat_bg_2,R.mipmap.img_cat_bg_3)
     override fun initData() {
         super.initData()
@@ -55,6 +55,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(R.layout.f
                 }
 
             }
+
         }
 
         mBinding.mBanner.apply {
