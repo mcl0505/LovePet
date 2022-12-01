@@ -5,9 +5,11 @@ import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import com.kingja.loadsir.callback.Callback
 import com.kingja.loadsir.core.LoadSir
+import com.mh55.easymvvm.App.AppUtil
 import com.mh55.easymvvm.App.CrashHandlerUtil
 import com.mh55.easymvvm.ui.loadsir.LoadingCallback
 import com.mh55.easymvvm.utils.MmkvUtil
+import com.tencent.bugly.crashreport.CrashReport
 
 /**
  * 程序入口  基类
@@ -22,6 +24,12 @@ abstract class EasyApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         instance = this
+        val strategy = CrashReport.UserStrategy(this)
+        strategy.apply {
+            appPackageName = AppUtil.getPackageName()
+        }
+
+        CrashReport.initCrashReport(this, "73fef7c8f3", false,strategy);
         MmkvUtil.init(this)
         CrashHandlerUtil.init()
         initLoadSir()
@@ -35,6 +43,7 @@ abstract class EasyApplication : MultiDexApplication() {
             }
         }
 
+        builder.setDefaultCallback(LoadingCallback::class.java)
         builder.commit()
     }
 

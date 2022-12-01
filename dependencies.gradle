@@ -120,6 +120,7 @@ dependencies {
     implementation rootProject.ext.GitHub.mmkv
     //TODO PickerView  条件选择器
     implementation rootProject.ext.GitHub.pickerView
+    api rootProject.ext.GitHub.bugly
     //TODO 图片选择器 视频选择器
 //    implementation rootProject.ext.GitHub.pictureselector
 

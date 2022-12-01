@@ -10,7 +10,8 @@ object ConfigBuilder {
     var isOpenCarsh = true
     //网络请求地址
     var mBaseHost = ""
-
+    //是否开启全局置灰  用作特殊节日默哀处理
+    var isGray = true
     var mImagePlaceholder = R.mipmap.icon_avatar_default
 
     object Path{

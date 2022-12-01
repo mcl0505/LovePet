@@ -6,6 +6,9 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -23,43 +26,57 @@ import com.imyyq.mvvm.base.IArgumentsFromIntent
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.mh55.easymvvm.App.AppManager
+import com.mh55.easymvvm.App.ConfigBuilder
 import com.mh55.easymvvm.R
 import com.mh55.easymvvm.ext.*
 import com.mh55.easymvvm.mvvm.BaseViewModel
 import com.mh55.easymvvm.mvvm.intent.BaseViewIntent
 import com.mh55.easymvvm.ui.IView
+import com.mh55.easymvvm.ui.dialog.LoadingDialog
 import com.mh55.easymvvm.ui.loadsir.ILoadsir
 import com.mh55.easymvvm.ui.loadsir.LoadingCallback
-import com.mh55.easymvvm.utils.LogUtil
 import com.mh55.easymvvm.utils.StatusBarUtils
 import com.mh55.easymvvm.widget.title.TitleBar
 import java.lang.NullPointerException
 
 abstract class AbsActivity<V : ViewDataBinding, VM : BaseViewModel> :
-    AppCompatActivity(), IView<V, VM>, IActivityResult, IArgumentsFromIntent ,ILoadsir{
+    AppCompatActivity(), IView<V, VM>, IActivityResult, IArgumentsFromIntent, ILoadsir {
     //Activity 标识
     open val TAG: String get() = this::class.java.simpleName
     protected lateinit var mContext: Context
     protected lateinit var mBinding: V
     protected lateinit var mViewModel: VM
     protected lateinit var mViewContent: FrameLayout
+
     //标题
     protected lateinit var mTitlebar: TitleBar
-//
-//    private lateinit var mLoadingDialog: LoadingDialog
+
+    //加载框
+    private lateinit var mLoadingDialog: LoadingDialog
     private lateinit var mStartActivityForResult: ActivityResultLauncher<Intent>
+
     //true=黑色  false=白色
     open val isDark get() = true
+
     //true=禁用重力感应  false=启用重力感应
     open val isNoSensor get() = false
+
     //状态展示的根布局
-    var mLoadSirView:LoadService<*>? = null
+    var mLoadSirView: LoadService<*>? = null
+
     //骨架布局
-    var mSkeletonScreen: SkeletonScreen?=null
+    var mSkeletonScreen: SkeletonScreen? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mContext = this
+        //全局置灰处理
+        val paint = Paint()
+        val cm = ColorMatrix()
+        cm.setSaturation(if (ConfigBuilder.isGray) 0f else 1f)
+        paint.colorFilter = ColorMatrixColorFilter(cm)
+        window.decorView.setLayerType(View.LAYER_TYPE_HARDWARE, paint)
+
         //全屏 透明状态栏
         StatusBarUtils.setStatusBarTransparent(this)
         //设置默认状态栏字体为黑色
@@ -68,7 +85,7 @@ abstract class AbsActivity<V : ViewDataBinding, VM : BaseViewModel> :
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
         }
         setContentView(R.layout.activity_root)
-        mBinding = initBinding(layoutInflater,null)
+        mBinding = initBinding(layoutInflater, null)
         mViewContent = findViewById(R.id.frame_content)
         mViewContent.addView(mBinding.root)
         //初始化ViewModel
@@ -89,20 +106,18 @@ abstract class AbsActivity<V : ViewDataBinding, VM : BaseViewModel> :
         initBaseLiveData()
     }
 
-    override fun showLoading() {
-        if (mLoadSirView == null){
-            throw NullPointerException("必须先设置状态展示的根布局")
-        }
-
-        mLoadSirView?.showCallback(LoadingCallback::class.java)
+    /**
+     * 加载中 显示
+     */
+    fun showLoading(msg: CharSequence = "加载中") {
+        mLoadingDialog.showDialog(this, msg)
     }
 
-    override fun dismissLoading() {
-        if (mLoadSirView == null){
-            throw NullPointerException("必须先设置状态展示的根布局")
-        }
-
-        mLoadSirView?.showSuccess()
+    /**
+     * 加载框 消失
+     */
+    fun dismissLoading() {
+        mLoadingDialog.dismissDialog()
     }
 
     private fun initTitle() {
@@ -121,26 +136,36 @@ abstract class AbsActivity<V : ViewDataBinding, VM : BaseViewModel> :
     open fun setTitleText(): String = ""
 
     override fun initBaseLiveData() {
-        mViewModel.mUiChangeLiveData.observe(this){
-            when(it){
-                is BaseViewIntent.finish->{
-                    if (it.resultCode != null){
-                        setResult(it.resultCode,getIntentByMapOrBundle(this,null,it.map,it.bundle))
+        mViewModel.mUiChangeLiveData.observe(this) {
+            when (it) {
+                is BaseViewIntent.finish -> {
+                    if (it.resultCode != null) {
+                        setResult(
+                            it.resultCode,
+                            getIntentByMapOrBundle(this, null, it.map, it.bundle)
+                        )
                     }
 
                     finish()
                 }
-                is BaseViewIntent.startActivity->{
-                    startActivity(getIntentByMapOrBundle(this,it.clazz,it.map,it.bundle))
+                is BaseViewIntent.startActivity -> {
+                    startActivity(getIntentByMapOrBundle(this, it.clazz, it.map, it.bundle))
                 }
-                is BaseViewIntent.startActivityForResult->{
-                    mStartActivityForResult.launch(getIntentByMapOrBundle(this,it. clazz, it.map, it.bundle))
+                is BaseViewIntent.startActivityForResult -> {
+                    mStartActivityForResult.launch(
+                        getIntentByMapOrBundle(
+                            this,
+                            it.clazz,
+                            it.map,
+                            it.bundle
+                        )
+                    )
                 }
-                is BaseViewIntent.setResult->{
-                    if (it.data == null){
-                        val intent = getIntentByMapOrBundle(this,null,it.map,it.bundle)
-                        setResult(it.resultCode,intent)
-                    }else{
+                is BaseViewIntent.setResult -> {
+                    if (it.data == null) {
+                        val intent = getIntentByMapOrBundle(this, null, it.map, it.bundle)
+                        setResult(it.resultCode, intent)
+                    } else {
                         setResult(it.resultCode, it.data)
                     }
 
@@ -160,7 +185,8 @@ abstract class AbsActivity<V : ViewDataBinding, VM : BaseViewModel> :
     //必须先在OnCreate 中注册
     private fun initStartActivityForResult() {
         if (!this::mStartActivityForResult.isInitialized) {
-            mStartActivityForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            mStartActivityForResult =
+                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
                     val data = it.data ?: Intent()
                     when (it.resultCode) {
                         Activity.RESULT_OK -> {
@@ -185,23 +211,55 @@ abstract class AbsActivity<V : ViewDataBinding, VM : BaseViewModel> :
                 }
         }
     }
+
     final override fun getBundle(): Bundle? {
         return intent.extras
     }
+
     final override fun getArgumentsIntent(): Intent? {
         return intent
     }
-    override fun startActivity(clazz: Class<out Activity>, map: MutableMap<String, *>?, bundle: Bundle?) {
+
+    override fun startActivity(
+        clazz: Class<out Activity>,
+        map: MutableMap<String, *>?,
+        bundle: Bundle?
+    ) {
         mViewModel.mUiChangeLiveData.postValue(BaseViewIntent.startActivity(clazz, map, bundle))
     }
-    override fun startActivityForResult(clazz: Class<out Activity>, map: MutableMap<String, *>?, bundle: Bundle?) {
-        mViewModel.mUiChangeLiveData.postValue(BaseViewIntent.startActivityForResult(clazz, map, bundle))
+
+    override fun startActivityForResult(
+        clazz: Class<out Activity>,
+        map: MutableMap<String, *>?,
+        bundle: Bundle?
+    ) {
+        mViewModel.mUiChangeLiveData.postValue(
+            BaseViewIntent.startActivityForResult(
+                clazz,
+                map,
+                bundle
+            )
+        )
     }
+
     override fun finish(resultCode: Int, map: MutableMap<String, *>?, bundle: Bundle?) {
         mViewModel.mUiChangeLiveData.postValue(BaseViewIntent.finish(resultCode, map, bundle))
     }
-    override fun setResult(resultCode: Int, map: MutableMap<String, *>?, bundle: Bundle?, data: Intent?) {
-        mViewModel.mUiChangeLiveData.postValue(BaseViewIntent.setResult(resultCode, map, bundle, data))
+
+    override fun setResult(
+        resultCode: Int,
+        map: MutableMap<String, *>?,
+        bundle: Bundle?,
+        data: Intent?
+    ) {
+        mViewModel.mUiChangeLiveData.postValue(
+            BaseViewIntent.setResult(
+                resultCode,
+                map,
+                bundle,
+                data
+            )
+        )
     }
 
     /**
@@ -226,6 +284,7 @@ abstract class AbsActivity<V : ViewDataBinding, VM : BaseViewModel> :
         }
         return super.dispatchTouchEvent(ev)
     }
+
     fun hideKeyboard(event: MotionEvent, view: View?) {
         try {
             if (view != null && view is EditText) {

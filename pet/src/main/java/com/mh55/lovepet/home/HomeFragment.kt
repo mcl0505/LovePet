@@ -1,6 +1,7 @@
 package com.mh55.lovepet.home
 
 import android.graphics.drawable.GradientDrawable
+import android.view.View
 import com.mh55.easymvvm.dsl.setShapeDrawable
 import com.mh55.easymvvm.ext.displayImage
 import com.mh55.easymvvm.ext.displayImageRadius
@@ -8,6 +9,7 @@ import com.mh55.easymvvm.ext.getColor
 import com.mh55.easymvvm.ext.getPaletteColor
 import com.mh55.easymvvm.ext.toDp
 import com.mh55.easymvvm.ui.fragment.BaseFragment
+import com.mh55.easymvvm.ui.loadsir.LoadingCallback
 import com.mh55.easymvvm.utils.LogUtil
 import com.mh55.lovepet.BR
 import com.mh55.lovepet.R
@@ -34,6 +36,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(R.layout.f
     }
 
     val bannerList = listOf(R.mipmap.img_cat_bg,R.mipmap.img_cat_bg_2,R.mipmap.img_cat_bg_3)
+
     override fun initData() {
         super.initData()
         mBinding.mHomeSearch.apply {
@@ -110,6 +113,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeViewModel>(R.layout.f
 
             })
         }
+
+        mLoadSirView?.showCallback(LoadingCallback::class.java)
+    }
+
+    override fun getLoadSirView(): View? {
+        return mBinding.loadingView
     }
 
     override fun onPause() {

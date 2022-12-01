@@ -121,6 +121,8 @@ ext {
             "pickerView"        : "com.contrarywind:Android-PickerView:4.1.8",
             // TODO 图片选择器
             "pictureselector"   : "io.github.lucksiege:pictureselector:v2.7.2",
+            // TODO bugly
+            "bugly"   : "com.tencent.bugly:crashreport:4.1.9",
             // TODO  路由跳转
             "arouter"           : "com.alibaba:arouter-api:1.5.2",
             "arouterCompiler"   : "com.alibaba:arouter-compiler:1.5.2",

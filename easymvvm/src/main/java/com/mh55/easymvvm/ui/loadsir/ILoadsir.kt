@@ -13,14 +13,4 @@ interface ILoadsir {
      * 获取状态布局
      */
     fun getLoadSirView(): View?=null
-
-    /**
-     * 加载中布局
-     */
-    fun showLoading()
-
-    /**
-     * 加载成功，显示根布局
-     */
-    fun dismissLoading()
 }

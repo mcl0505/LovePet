@@ -21,6 +21,7 @@ import com.mh55.easymvvm.ext.getIntentByMapOrBundle
 import com.mh55.easymvvm.mvvm.BaseViewModel
 import com.mh55.easymvvm.mvvm.intent.BaseViewIntent
 import com.mh55.easymvvm.ui.IView
+import com.mh55.easymvvm.ui.dialog.LoadingDialog
 import com.mh55.easymvvm.ui.loadsir.ILoadsir
 import com.mh55.easymvvm.ui.loadsir.LoadingCallback
 import com.mh55.easymvvm.utils.LogUtil
@@ -46,6 +47,9 @@ abstract class AbsFragment<V : ViewBinding, VM : BaseViewModel>(
     protected lateinit var mBinding: V
     protected lateinit var mViewModel: VM
     private lateinit var mStartActivityForResult: ActivityResultLauncher<Intent>
+
+    //加载框
+    private lateinit var mLoadingDialog: LoadingDialog
     //状态展示的根布局
     var mLoadSirView: LoadService<*>? = null
     var mSkeletonScreen: SkeletonScreen?=null
@@ -59,27 +63,28 @@ abstract class AbsFragment<V : ViewBinding, VM : BaseViewModel>(
         savedInstanceState: Bundle?,
     ): View? {
         mBinding = initBinding(layoutInflater, null)
+        getLoadSirView()?.let {
+            LogUtil.d(it)
+            mLoadSirView = LoadSir.getDefault().register(it)
+        }
         return mBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewAndViewModel()
-        getLoadSirView()?.let {
-            LogUtil.d(it)
-            mLoadSirView = LoadSir.getDefault().register(it)
-        }
+
         initParam()
         initBaseLiveData()
         initData()
         initViewObservable()
     }
 
-    override fun showLoading() {
+    fun showLoading() {
         mLoadSirView?.showCallback(LoadingCallback::class.java)
     }
 
-    override fun dismissLoading() {
+    fun dismissLoading() {
         mLoadSirView?.showSuccess()
     }
 
