@@ -38,10 +38,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(
             MainPushAnimator.hindMenu(mBinding.mPush,mBinding.mArcLayout)
         }
         mBinding.mPush.singleClick {
-            if (it.isSelected){
-                MainPushAnimator.hindMenu(it,mBinding.mArcLayout)
-            }else MainPushAnimator.showMenu(it,mBinding.mArcLayout)
+//            if (it.isSelected){
+//                MainPushAnimator.hindMenu(it,mBinding.mArcLayout)
+//            }else MainPushAnimator.showMenu(it,mBinding.mArcLayout)
+
+            showLoading()
+            it.postDelayed({
+                dismissLoading()
+            },10*1000)
         }
+        //点击菜单
         mBinding.mArcLayout.children.forEach {
             it.singleClick {
                 MainPushAnimator.hindMenu(mBinding.mPush,mBinding.mArcLayout)

@@ -23,6 +23,8 @@ import androidx.databinding.ViewDataBinding
 import com.ethanhua.skeleton.SkeletonScreen
 import com.imyyq.mvvm.base.IActivityResult
 import com.imyyq.mvvm.base.IArgumentsFromIntent
+import com.kingja.loadsir.callback.Callback
+import com.kingja.loadsir.callback.SuccessCallback
 import com.kingja.loadsir.core.LoadService
 import com.kingja.loadsir.core.LoadSir
 import com.mh55.easymvvm.App.AppManager
@@ -31,16 +33,15 @@ import com.mh55.easymvvm.R
 import com.mh55.easymvvm.ext.*
 import com.mh55.easymvvm.mvvm.BaseViewModel
 import com.mh55.easymvvm.mvvm.intent.BaseViewIntent
+import com.mh55.easymvvm.ui.ILoading
 import com.mh55.easymvvm.ui.IView
 import com.mh55.easymvvm.ui.dialog.LoadingDialog
 import com.mh55.easymvvm.ui.loadsir.ILoadsir
-import com.mh55.easymvvm.ui.loadsir.LoadingCallback
 import com.mh55.easymvvm.utils.StatusBarUtils
 import com.mh55.easymvvm.widget.title.TitleBar
-import java.lang.NullPointerException
 
 abstract class AbsActivity<V : ViewDataBinding, VM : BaseViewModel> :
-    AppCompatActivity(), IView<V, VM>, IActivityResult, IArgumentsFromIntent, ILoadsir {
+    AppCompatActivity(), IView<V, VM>, IActivityResult, IArgumentsFromIntent, ILoadsir,ILoading {
     //Activity 标识
     open val TAG: String get() = this::class.java.simpleName
     protected lateinit var mContext: Context
@@ -52,7 +53,7 @@ abstract class AbsActivity<V : ViewDataBinding, VM : BaseViewModel> :
     protected lateinit var mTitlebar: TitleBar
 
     //加载框
-    private lateinit var mLoadingDialog: LoadingDialog
+    private var mLoadingDialog: LoadingDialog?=null
     private lateinit var mStartActivityForResult: ActivityResultLauncher<Intent>
 
     //true=黑色  false=白色
@@ -88,6 +89,7 @@ abstract class AbsActivity<V : ViewDataBinding, VM : BaseViewModel> :
         mBinding = initBinding(layoutInflater, null)
         mViewContent = findViewById(R.id.frame_content)
         mViewContent.addView(mBinding.root)
+
         //初始化ViewModel
         initViewAndViewModel()
         getLoadSirView()?.let {
@@ -105,19 +107,46 @@ abstract class AbsActivity<V : ViewDataBinding, VM : BaseViewModel> :
         //基础事件观察
         initBaseLiveData()
     }
-
     /**
-     * 加载中 显示
+     * 显示加载框
      */
-    fun showLoading(msg: CharSequence = "加载中") {
-        mLoadingDialog.showDialog(this, msg)
+    override fun showLoading() {
+        showLoading(R.string.loading_msg.getString())
     }
-
     /**
-     * 加载框 消失
+     * 显示加载框
+     * @param msg 加载提示文字
      */
-    fun dismissLoading() {
-        mLoadingDialog.dismissDialog()
+    override fun showLoading(msg: String) {
+        mLoadingDialog = LoadingDialog(mContext,msg)
+        mLoadingDialog?.showDialog()
+    }
+    /**
+     * 取消加载框
+     */
+    override fun dismissLoading() {
+        mLoadingDialog?.dismissDialog()
+    }
+    /**
+     * 显示状态布局
+     */
+    override fun showCallback(clazz: Class<out Callback>) {
+        showCallback(clazz){_,_->}
+    }
+    /**
+     * 显示状态布局与添加布局回调
+     */
+    override fun showCallback(clazz: Class<out Callback>,block:(context:Context,view:View) -> Unit) {
+        mLoadSirView?.showCallback(clazz)
+        mLoadSirView?.setCallBack(clazz){context,view->
+            block.invoke(context, view)
+        }
+    }
+    /**
+     * 隐藏状态布局的显示
+     */
+    override fun dismissCallback(){
+        mLoadSirView?.showSuccess()
     }
 
     private fun initTitle() {
@@ -169,6 +198,19 @@ abstract class AbsActivity<V : ViewDataBinding, VM : BaseViewModel> :
                         setResult(it.resultCode, it.data)
                     }
 
+                }
+                is BaseViewIntent.showCallback->{
+                    if (it.callback is SuccessCallback){
+                        dismissCallback()
+                    }else {
+                        showCallback(it.callback,it.block)
+                    }
+
+                }
+                is BaseViewIntent.showLoading->{
+                    if (it.isShow){
+                        showLoading(it.showMsg)
+                    }else dismissLoading()
                 }
             }
         }

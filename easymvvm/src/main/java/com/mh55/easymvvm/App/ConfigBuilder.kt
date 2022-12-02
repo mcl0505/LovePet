@@ -14,6 +14,7 @@ object ConfigBuilder {
     var isGray = true
     var mImagePlaceholder = R.mipmap.icon_avatar_default
 
+
     object Path{
         //异常采集保存路径
         var CRASH_LOG_PATH = AppUtil.Cache.getCachePath(EasyApplication.getContext()) + "/crash/"

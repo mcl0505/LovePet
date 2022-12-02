@@ -1,6 +1,10 @@
 package com.mh55.lovepet.community
 
+import android.view.View
+import com.google.android.material.button.MaterialButton
+import com.mh55.easymvvm.ext.singleClick
 import com.mh55.easymvvm.ui.fragment.BaseFragment
+import com.mh55.easymvvm.ui.loadsir.LoadSirDefaultNetCallback
 import com.mh55.lovepet.BR
 import com.mh55.lovepet.R
 import com.mh55.lovepet.databinding.FragmentCommunityBinding
@@ -21,5 +25,25 @@ class CommunityFragment : BaseFragment<FragmentCommunityBinding,CommunityViewMod
     companion object {
         @JvmStatic
         fun newInstance() = CommunityFragment()
+    }
+
+    override fun initData() {
+        super.initData()
+//        mBinding.net.singleClick {
+//            showCallback(LoadSirDefaultNetCallback::class.java){_,view->
+//                view.findViewById<MaterialButton>(R.id.btn_net_refresh).singleClick {
+//                    showLoading()
+//                    it.postDelayed({
+//                        dismissLoading()
+//                        dismissCallback()
+//                    },2*1000)
+//
+//                }
+//            }
+//        }
+    }
+
+    override fun getLoadSirView(): View? {
+        return mBinding.loadingView
     }
 }

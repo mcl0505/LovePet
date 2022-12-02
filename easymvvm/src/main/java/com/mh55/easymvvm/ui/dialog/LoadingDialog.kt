@@ -1,6 +1,5 @@
 package com.mh55.easymvvm.ui.dialog
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.view.animation.Animation
@@ -12,14 +11,16 @@ import com.mh55.easymvvm.R
 /**
  * 加载等待框
  */
-class LoadingDialog(context: Context,msg:CharSequence) : Dialog(
+class LoadingDialog(context: Context,val msg:String =  "加载中") : Dialog(
     context,
     R.style.LoadingDialog
 ){
-    private var loadingDialog: LoadingDialog? = null
-
     init {
-        setContentView(R.layout.layout_loading_view)
+        setContentView(R.layout.dialog_loading_view)
+    }
+
+    fun showDialog() {
+        super.show()
         val imageView: ImageView = findViewById(R.id.iv_image)
         val textView: TextView = findViewById(R.id.message)
         val animation: Animation = RotateAnimation(
@@ -37,20 +38,8 @@ class LoadingDialog(context: Context,msg:CharSequence) : Dialog(
         textView.text = msg
     }
 
-    fun showDialog(context: Context,msg: CharSequence = "加载中") {
-        if (context is Activity) {
-            if (context.isFinishing) {
-                return
-            }
-        }
-
-        if (loadingDialog == null) {
-            loadingDialog = LoadingDialog(context,msg)
-        }
-        loadingDialog?.show()
-    }
-
     fun dismissDialog() {
-        loadingDialog?.dismiss()
+        super.dismiss()
+
     }
 }

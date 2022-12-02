@@ -14,10 +14,16 @@
         tools:context=".mine.MIneFragment">
 
         <TextView
+            android:id="@+id/net"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="社区"
             android:gravity="center"/>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/loadingView"
+            android:visibility="gone"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

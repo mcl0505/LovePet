@@ -5,11 +5,16 @@ import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import com.kingja.loadsir.callback.Callback
 import com.kingja.loadsir.core.LoadSir
+import com.mh55.easymvvm.App.AppManager
 import com.mh55.easymvvm.App.AppUtil
 import com.mh55.easymvvm.App.CrashHandlerUtil
-import com.mh55.easymvvm.ui.loadsir.LoadingCallback
+import com.mh55.easymvvm.ui.loadsir.LoadSirDefaultNetCallback
 import com.mh55.easymvvm.utils.MmkvUtil
 import com.tencent.bugly.crashreport.CrashReport
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 /**
  * 程序入口  基类
@@ -27,23 +32,34 @@ abstract class EasyApplication : MultiDexApplication() {
         val strategy = CrashReport.UserStrategy(this)
         strategy.apply {
             appPackageName = AppUtil.getPackageName()
+
+        }
+        CrashReport.initCrashReport(this, "73fef7c8f3", false,strategy)
+        AppManager.register(this)
+        CoroutineScope(Dispatchers.IO + SupervisorJob()).launch {
+            //数据存储
+            MmkvUtil.init(this@EasyApplication)
+            //收集异常信息  保存到手机中方便查看
+            CrashHandlerUtil.init()
+
+            initOtherSDK()
         }
 
-        CrashReport.initCrashReport(this, "73fef7c8f3", false,strategy);
-        MmkvUtil.init(this)
-        CrashHandlerUtil.init()
         initLoadSir()
     }
 
+    fun initOtherSDK(){}
+
+
     private fun initLoadSir(){
         val builder = LoadSir.beginBuilder()
-        if (getStateCallback()?.size?:0>0){
+        if ((getStateCallback()?.size ?: 0) > 0){
             getStateCallback()?.forEach {
                 builder.addCallback(it)
             }
         }
 
-        builder.setDefaultCallback(LoadingCallback::class.java)
+        builder.addCallback(LoadSirDefaultNetCallback())
         builder.commit()
     }
 
