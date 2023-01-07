@@ -107,7 +107,7 @@ dependencies {
     implementation rootProject.ext.GitHub.fastjson
     // TODO  gson
     implementation rootProject.ext.GitHub.gson
-    // TODO  图片加载框架
+    // TODO  Coil 图片加载框架
     implementation rootProject.ext.GitHub.glide
     implementation rootProject.ext.GitHub.coil
     implementation rootProject.ext.GitHub.coilGif
@@ -120,6 +120,7 @@ dependencies {
     implementation rootProject.ext.GitHub.mmkv
     //TODO PickerView  条件选择器
     implementation rootProject.ext.GitHub.pickerView
+    //TODO Bugly 异常上报
     api rootProject.ext.GitHub.bugly
     //TODO 图片选择器 视频选择器
 //    implementation rootProject.ext.GitHub.pictureselector
@@ -129,8 +130,5 @@ dependencies {
     implementation rootProject.ext.GitHub.utilcodex
 //    implementation rootProject.ext.GitHub.permissionx
     implementation 'com.github.Justson.AgentWeb:agentweb-core:v5.0.0-alpha.1-androidx'
-    //TODO 骨架布局  https://github.com/ethanhua/Skeleton
-    implementation 'com.ethanhua:skeleton:1.1.2'
-    implementation 'io.supercharge:shimmerlayout:2.1.0'
 
 }

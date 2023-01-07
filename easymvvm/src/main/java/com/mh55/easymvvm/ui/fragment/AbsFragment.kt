@@ -12,7 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.ethanhua.skeleton.SkeletonScreen
 import com.imyyq.mvvm.base.IActivityResult
 import com.kingja.loadsir.callback.Callback
 import com.kingja.loadsir.callback.SuccessCallback
@@ -54,7 +53,6 @@ abstract class AbsFragment<V : ViewBinding, VM : BaseViewModel>(
     private var mLoadingDialog: LoadingDialog?=null
     //状态展示的根布局
     var mLoadSirView: LoadService<*>? = null
-    var mSkeletonScreen: SkeletonScreen?=null
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
@@ -214,7 +212,6 @@ abstract class AbsFragment<V : ViewBinding, VM : BaseViewModel>(
                     }
 
                 }
-
                 is BaseViewIntent.showCallback->{
                     if (it.callback is SuccessCallback){
                         dismissCallback()

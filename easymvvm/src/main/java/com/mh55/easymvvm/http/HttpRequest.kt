@@ -3,6 +3,8 @@ package com.mh55.easymvvm.http
 import androidx.collection.ArrayMap
 import com.mh55.easymvvm.App.ConfigBuilder
 import com.mh55.easymvvm.http.interceptor.CacheInterceptor
+import com.mh55.easymvvm.http.interceptor.HttpHeaderInterceptor
+import com.mh55.easymvvm.http.interceptor.HttpLogInterceptor
 import com.mh55.easymvvm.http.moshi.MyKotlinJsonAdapterFactory
 import com.mh55.easymvvm.http.moshi.MyStandardJsonAdapters
 import com.squareup.moshi.Moshi
@@ -31,7 +33,7 @@ object HttpRequest {
     lateinit var mDefaultBaseUrl: String
 
     // 默认的请求头
-    private lateinit var mDefaultHeader: ArrayMap<String, String>
+    lateinit var mDefaultHeader: ArrayMap<String, String>
 
     /**
      * 存储 baseUrl，以便可以动态更改
@@ -83,6 +85,8 @@ object HttpRequest {
             // 超时时间
             httpClientBuilder.connectTimeout(mDefaultTimeout.toLong(), TimeUnit.SECONDS)
             httpClientBuilder.addInterceptor(CacheInterceptor())
+            httpClientBuilder.addInterceptor(HttpHeaderInterceptor())
+            httpClientBuilder.addInterceptor(HttpLogInterceptor())
 
             // 拦截器
             interceptors.forEach { interceptor ->

@@ -130,8 +130,8 @@ ext {
             "loadsir"           : "com.kingja.loadsir:loadsir:1.3.8",
             // TODO  页面状态管理 https://github.com/KingJA/LoadSir
             "utilcodex"         : "com.blankj:utilcodex:1.30.6",
-//            //TODO 权限请求框架 https://github.com/guolindev/PermissionX
-//            "permissionx"       : "com.guolindev.permissionx:permissionx:1.7.1"
+            //TODO  屏幕适配方案 https://gitcode.net/mirrors/jessyancoding/androidautosize
+            "autosize"       : "me.jessyan:autosize:1.2.1"
     ]
 
 }

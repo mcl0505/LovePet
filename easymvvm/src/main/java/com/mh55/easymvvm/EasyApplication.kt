@@ -29,12 +29,7 @@ abstract class EasyApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        val strategy = CrashReport.UserStrategy(this)
-        strategy.apply {
-            appPackageName = AppUtil.getPackageName()
 
-        }
-        CrashReport.initCrashReport(this, "73fef7c8f3", false,strategy)
         AppManager.register(this)
         CoroutineScope(Dispatchers.IO + SupervisorJob()).launch {
             //数据存储
@@ -49,6 +44,15 @@ abstract class EasyApplication : MultiDexApplication() {
     }
 
     fun initOtherSDK(){}
+
+    private fun initCrashReport(){
+        val strategy = CrashReport.UserStrategy(this)
+        strategy.apply {
+            appPackageName = AppUtil.getPackageName()
+
+        }
+        CrashReport.initCrashReport(this, "73fef7c8f3", false,strategy)
+    }
 
 
     private fun initLoadSir(){
